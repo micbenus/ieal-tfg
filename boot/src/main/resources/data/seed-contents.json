@@ -1,0 +1,131 @@
+[
+  {
+    "sourceId": "ieal-instituto-001", "sourceSystem": "LOCAL_JSON",
+    "sourceUrl": "https://alojawebapps.us.es/centrosdptos/institutos/institutos.php?centro=220",
+    "slug": "instituto-universitario-estudios-america-latina",
+    "title": "Instituto Universitario de Estudios sobre América Latina",
+    "summary": "Ficha institucional del IEAL en el directorio de centros de la Universidad de Sevilla.",
+    "body": "El IEAL es un instituto universitario dedicado a los estudios sobre América Latina.",
+    "contentType": "PAGE", "section": "Instituto", "categories": ["Institucional"],
+    "tags": ["IEAL", "Universidad de Sevilla", "América Latina"],
+    "keywords": ["instituto", "estudios latinoamericanos"], "language": "es",
+    "publishedAt": "2025-01-01T10:00:00Z", "status": "INDEXED", "visible": true
+  },
+  {
+    "sourceId": "ieal-direccion-001", "sourceSystem": "LOCAL_JSON",
+    "sourceUrl": "https://www.us.es/actualidad-de-la-us/nuevo-director-del-instituto-de-estudios-de-america-latina-de-la-universidad-de",
+    "slug": "miguel-angel-martin-lopez-director-ieal",
+    "title": "Miguel Ángel Martín López, director del IEAL",
+    "summary": "La Universidad de Sevilla informó de su elección como director del IEAL.",
+    "body": "Miguel Ángel Martín López fue elegido director y planteó impulsar proyectos internacionales con socios latinoamericanos.",
+    "contentType": "NEWS", "section": "Actualidad", "categories": ["Institucional", "Dirección"],
+    "tags": ["Miguel Ángel Martín López", "IEAL"], "keywords": ["director", "América Latina"],
+    "language": "es", "publishedAt": "2025-10-01T10:00:00Z", "status": "INDEXED", "visible": true
+  },
+  {
+    "sourceId": "ieal-secretaria-001", "sourceSystem": "LOCAL_JSON",
+    "sourceUrl": "https://alojawebapps.us.es/centrosdptos/institutos/institutos.php?centro=220",
+    "slug": "adriana-fillol-mazo-secretaria-ieal", "title": "Adriana Fillol Mazo, secretaria del IEAL",
+    "summary": "La ficha institucional identifica a Adriana Fillol Mazo como secretaria del IEAL.",
+    "body": "Información pública de la estructura de dirección del Instituto Universitario de Estudios sobre América Latina.",
+    "contentType": "PAGE", "section": "Instituto", "categories": ["Institucional", "Dirección"],
+    "tags": ["Adriana Fillol Mazo", "IEAL"], "keywords": ["secretaria", "equipo de dirección"],
+    "language": "es", "publishedAt": "2025-10-01T10:00:00Z", "status": "INDEXED", "visible": true
+  },
+  {
+    "sourceId": "us-persona-001", "sourceSystem": "LOCAL_JSON",
+    "sourceUrl": "https://www.us.es/trabaja-en-la-us/directorio/adriana-fillol-mazo",
+    "slug": "perfil-adriana-fillol-mazo", "title": "Perfil académico de Adriana Fillol Mazo",
+    "summary": "Perfil público en el directorio de personal de la Universidad de Sevilla.",
+    "body": "Profesora titular del área de Derecho Internacional Público y Relaciones Internacionales, con actividad investigadora en seguridad alimentaria.",
+    "contentType": "PAGE", "section": "Miembros", "categories": ["Personal investigador"],
+    "tags": ["Derecho Internacional", "seguridad alimentaria"], "keywords": ["Adriana Fillol Mazo", "investigación"],
+    "language": "es", "publishedAt": "2025-01-01T10:00:00Z", "status": "INDEXED", "visible": true
+  },
+  {
+    "sourceId": "ieal-noticia-mercosur-2024", "sourceSystem": "LOCAL_JSON",
+    "sourceUrl": "https://www.us.es/actualidad-de-la-us/un-representante-de-mercosur-visita-la-us-para-estrechar-relaciones-con-el-ieal",
+    "slug": "representante-mercosur-visita-ieal",
+    "title": "Un representante de MERCOSUR visita la US para estrechar relaciones con el IEAL",
+    "summary": "Encuentro para promover proyectos sobre derecho a la alimentación y seguridad alimentaria.",
+    "body": "La visita abordó vías de colaboración con el IEAL y actividades académicas relacionadas con América Latina.",
+    "contentType": "NEWS", "section": "Actualidad", "categories": ["Cooperación", "Relaciones internacionales"],
+    "tags": ["MERCOSUR", "IEAL", "alimentación"], "keywords": ["colaboración", "América Latina"],
+    "language": "es", "publishedAt": "2024-07-24T10:00:00Z", "status": "INDEXED", "visible": true
+  },
+  {
+    "sourceId": "ieal-dialogo-alimentacion-2023", "sourceSystem": "LOCAL_JSON",
+    "sourceUrl": "https://www.us.es/actualidad-de-la-us/primer-dialogo-parlamentario-y-academico-latinoamericano-por-la-alimentacion",
+    "slug": "dialogo-parlamentario-academico-alimentacion",
+    "title": "Primer Diálogo Parlamentario y Académico Latinoamericano por la Alimentación",
+    "summary": "Participación de un miembro del IEAL en un encuentro latinoamericano sobre alimentación.",
+    "body": "La actividad reunió a representantes parlamentarios y académicos para tratar políticas vinculadas al derecho a la alimentación.",
+    "contentType": "EVENT", "section": "Actividades", "categories": ["Seminarios", "Cooperación"],
+    "tags": ["alimentación", "América Latina", "IEAL"], "keywords": ["diálogo", "derecho a la alimentación"],
+    "language": "es", "publishedAt": "2023-05-01T10:00:00Z",
+    "organizer": "Instituciones parlamentarias y académicas latinoamericanas", "status": "INDEXED", "visible": true
+  },
+  {
+    "sourceId": "ieal-proyecto-neema-001", "sourceSystem": "LOCAL_JSON",
+    "sourceUrl": "https://ulysseus.eu/es/neema/equipo/", "slug": "proyecto-neema-equipo",
+    "title": "Proyecto NEEMA sobre resiliencia alimentaria",
+    "summary": "Proyecto coordinado desde la Universidad de Sevilla con participación de Miguel Ángel Martín López.",
+    "body": "NEEMA trabaja en formación y resiliencia alimentaria mediante colaboración universitaria internacional.",
+    "contentType": "PAGE", "section": "Investigación", "categories": ["Proyectos", "Cooperación"],
+    "tags": ["NEEMA", "seguridad alimentaria", "África"], "keywords": ["resiliencia alimentaria", "cooperación internacional"],
+    "language": "es", "publishedAt": "2024-01-01T10:00:00Z", "status": "INDEXED", "visible": true
+  },
+  {
+    "sourceId": "ieal-publicacion-food-security-2021", "sourceSystem": "LOCAL_JSON",
+    "sourceUrl": "https://www.us.es/trabaja-en-la-us/directorio/adriana-fillol-mazo",
+    "slug": "food-security-issues-and-challenges", "title": "Food Security Issues and Challenges",
+    "summary": "Publicación académica editada por Adriana Fillol Mazo y Miguel Ángel Martín López.",
+    "body": "Obra de 2021 incluida en el perfil público de producción científica de la Universidad de Sevilla.",
+    "contentType": "PUBLICATION", "section": "Publicaciones", "categories": ["Libros", "Investigación"],
+    "tags": ["seguridad alimentaria", "derecho internacional"],
+    "keywords": ["Food Security", "Miguel Ángel Martín López", "Adriana Fillol Mazo"],
+    "language": "es", "publishedAt": "2021-01-01T10:00:00Z", "status": "INDEXED", "visible": true
+  },
+  {
+    "sourceId": "ieal-publicacion-indicadores-rurales-2023", "sourceSystem": "LOCAL_JSON",
+    "sourceUrl": "https://www.us.es/trabaja-en-la-us/directorio/adriana-fillol-mazo",
+    "slug": "indicadores-rurales-derecho-alimentacion",
+    "title": "Los indicadores rurales en el derecho humano a la alimentación",
+    "summary": "Artículo de Adriana Fillol Mazo y Miguel Ángel Martín López publicado en 2023.",
+    "body": "Trabajo sobre indicadores rurales aplicados al seguimiento del derecho humano a la alimentación.",
+    "contentType": "PUBLICATION", "section": "Publicaciones", "categories": ["Artículos", "Investigación"],
+    "tags": ["indicadores rurales", "alimentación"], "keywords": ["derecho humano", "investigación"],
+    "language": "es", "publishedAt": "2023-01-01T10:00:00Z", "status": "INDEXED", "visible": true
+  },
+  {
+    "sourceId": "ieal-linea-001", "sourceSystem": "LOCAL_JSON",
+    "sourceUrl": "https://alojawebapps.us.es/centrosdptos/institutos/institutos.php?centro=220",
+    "slug": "estudios-interdisciplinares-america-latina",
+    "title": "Estudios interdisciplinares sobre América Latina",
+    "summary": "Contenido demostrativo que representa la actividad investigadora transversal del IEAL.",
+    "body": "El prototipo agrupa contenidos institucionales y académicos de distintas áreas para facilitar una búsqueda transversal.",
+    "contentType": "PAGE", "section": "Investigación", "categories": ["Líneas de investigación"],
+    "tags": ["América Latina", "interdisciplinariedad"], "keywords": ["investigación", "estudios latinoamericanos"],
+    "language": "es", "publishedAt": "2025-01-01T10:00:00Z", "status": "INDEXED", "visible": true
+  },
+  {
+    "sourceId": "ieal-cooperacion-001", "sourceSystem": "LOCAL_JSON",
+    "sourceUrl": "https://www.us.es/actualidad-de-la-us/nuevo-director-del-instituto-de-estudios-de-america-latina-de-la-universidad-de",
+    "slug": "cooperacion-europa-america-latina", "title": "Cooperación académica entre Europa y América Latina",
+    "summary": "Línea institucional orientada a impulsar consorcios y colaboración universitaria internacional.",
+    "body": "El IEAL plantea reforzar la participación en convocatorias internacionales junto a socios latinoamericanos.",
+    "contentType": "PAGE", "section": "Cooperación", "categories": ["Relaciones internacionales"],
+    "tags": ["Europa", "América Latina", "universidades"], "keywords": ["consorcios", "cooperación académica"],
+    "language": "es", "publishedAt": "2025-10-01T10:00:00Z", "status": "INDEXED", "visible": true
+  },
+  {
+    "sourceId": "ieal-red-ceisal-001", "sourceSystem": "LOCAL_JSON",
+    "sourceUrl": "https://rediceisal.hypotheses.org/", "slug": "red-ceisal-estudios-latinoamericanos",
+    "title": "Red europea de estudios sociales sobre América Latina",
+    "summary": "Contenido de demostración sobre redes académicas dedicadas a los estudios latinoamericanos.",
+    "body": "CEISAL reúne centros e institutos europeos relacionados con la investigación social sobre América Latina.",
+    "contentType": "PAGE", "section": "Cooperación", "categories": ["Redes académicas"],
+    "tags": ["CEISAL", "América Latina", "Europa"], "keywords": ["red científica", "estudios sociales"],
+    "language": "es", "publishedAt": "2025-01-01T10:00:00Z", "status": "INDEXED", "visible": true
+  }
+]

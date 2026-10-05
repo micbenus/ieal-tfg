@@ -1,0 +1,35 @@
+@startuml
+title Secuencia real de GET /api/v1/search?q=america
+actor Usuario
+participant "Swagger UI" as Swagger
+participant SearchController
+participant ContentService
+participant TextNormalizer
+participant MongoContentRepositoryAdapter as Adapter
+participant SpringDataContentRepository as Repository
+database MongoDB
+participant RelevanceScorer
+participant ApiContentMapper
+
+Usuario -> Swagger : Ejecuta búsqueda
+Swagger -> SearchController : GET /api/v1/search?q=america
+SearchController -> ContentService : search(SearchQuery, SearchFilters)
+ContentService -> Adapter : findAllVisible()
+Adapter -> Repository : findAllByVisibleTrue()
+Repository -> MongoDB : consulta collection contents
+MongoDB --> Repository : ContentDocument[]
+Repository --> Adapter : ContentDocument[]
+Adapter --> ContentService : ContentItem[]
+loop por cada contenido y filtro
+  ContentService -> RelevanceScorer : score(item, "america")
+  RelevanceScorer -> TextNormalizer : normalize(texto y consulta)
+  TextNormalizer --> RelevanceScorer : texto sin tildes y en minúsculas
+  RelevanceScorer --> ContentService : score
+end
+ContentService -> ContentService : descarta score 0, ordena y pagina
+ContentService --> SearchController : SearchPage
+SearchController -> ApiContentMapper : toSearchResponse(...)
+ApiContentMapper --> SearchController : SearchResponse
+SearchController --> Swagger : HTTP 200 + JSON
+Swagger --> Usuario : muestra respuesta
+@enduml

@@ -1,0 +1,39 @@
+@startuml
+title Arquitectura hexagonal simplificada del prototipo Servicio Buscador IEAL
+left to right direction
+skinparam componentStyle rectangle
+skinparam shadowing false
+
+actor "Administrador\no cliente REST" as admin
+actor "WordPress\n(consumidor futuro)" as wordpress
+
+rectangle "Adapter de entrada\nAPI REST\nControllers + OpenAPI" as restAdapter
+
+package "Nucleo de la aplicacion" {
+  rectangle "Application\nContentService\nCasos de uso" as application
+  hexagon "Domain\nContentItem\nReglas de busqueda\nPuertos" as domain
+}
+
+rectangle "Adapter de salida\nMongoContentRepositoryAdapter" as mongoAdapter
+database "MongoDB Community\ncontenidos indexados" as mongo
+
+rectangle "Adapter futuro\nWordpressContentAdapter\n(no implementado)" as wordpressAdapter
+
+admin --> restAdapter : HTTP REST
+wordpress --> restAdapter : HTTP REST\nconsulta futura
+restAdapter --> application : ContentUseCase
+application --> domain : aplica reglas\ny normalizacion
+application --> mongoAdapter : ContentRepositoryPort
+mongoAdapter --> mongo : Spring Data MongoDB
+application ..> wordpressAdapter : ExternalContentProviderPort\npreparado para importar
+
+note bottom of domain
+El dominio no depende de Spring,
+MongoDB ni WordPress.
+end note
+
+note bottom of wordpressAdapter
+La integracion real con WordPress
+queda fuera del alcance del MVP.
+end note
+@enduml

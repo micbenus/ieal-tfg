@@ -1,0 +1,66 @@
+@startuml
+title Estructura vertical de carpetas y responsabilidades DDD
+top to bottom direction
+skinparam shadowing false
+skinparam defaultTextAlignment left
+skinparam packageStyle rectangle
+
+folder "servicio-buscador-ieal\n\nRaiz del proyecto\npom.xml: agrega los modulos Maven\ndocker-compose.yml: MongoDB local\ndocs/: memoria, diagramas y documentacion" as root
+
+folder "domain\n\nNucleo DDD sin Spring ni MongoDB\nContiene reglas de negocio y contratos" as domain {
+  folder "entity\nContentItem, ContentPage, SearchPage" as domainEntity
+  folder "valueobject\nSearchQuery, SearchFilters" as domainValueObject
+  folder "enums\nContentType, ContentStatus, SourceSystem" as domainEnums
+  folder "port/in\nCasos de uso que expone el dominio" as domainPortIn
+  folder "port/out\nContratos para persistencia y proveedores externos" as domainPortOut
+  folder "service\nTextNormalizer y RelevanceScorer" as domainService
+  folder "exception\nErrores propios del dominio" as domainException
+}
+
+folder "application\n\nCapa de casos de uso\nOrquesta el dominio sin conocer MongoDB" as application {
+  folder "service\nContentService: alta, listado, busqueda, actualizacion y reindexado" as applicationService
+  folder "src/test\nPruebas unitarias de casos de uso" as applicationTest
+}
+
+folder "infra-mongo\n\nAdapter de salida\nImplementa los puertos del dominio con MongoDB" as infrastructure {
+  folder "adapter/out\nMongoContentRepositoryAdapter\nWordpressContentAdapter preparado" as infraAdapter
+  folder "repository\nSpringDataContentRepository" as infraRepository
+  folder "entity\nContentDocument: documento MongoDB" as infraEntity
+  folder "mapper\nMongoContentMapper: dominio <-> Mongo" as infraMapper
+}
+
+folder "api-rest\n\nAdapter de entrada REST\nExpone el contrato a WordPress y otros clientes" as api {
+  folder "controller\nSearchController, ContentsController, HealthController" as apiController
+  folder "mapper\nApiContentMapper: DTO <-> dominio" as apiMapper
+  folder "exception\nApiExceptionHandler: errores HTTP uniformes" as apiException
+  folder "resources/openapi\nopenapi.yaml: contrato fuente de verdad" as apiOpenApi
+  folder "src/test\nPruebas web y de mapeo" as apiTest
+}
+
+folder "boot\n\nComposicion y arranque Spring Boot\nResuelve configuracion e inicializa datos" as boot {
+  folder "application\nSearchApplication: punto de entrada" as bootApplication
+  folder "config\nApplicationConfig y SeedDataLoader" as bootConfig
+  folder "resources\napplication.yml y data/seed-contents.json" as bootResources
+}
+
+root -[hidden]down-> domain
+domain -[hidden]down-> application
+application -[hidden]down-> infrastructure
+infrastructure -[hidden]down-> api
+api -[hidden]down-> boot
+
+note right of domain
+Aqui no se permite acoplamiento
+con Spring, MongoDB o WordPress.
+end note
+
+note right of infrastructure
+MongoDB es un detalle tecnico:
+el dominio solo conoce sus puertos.
+end note
+
+note right of api
+WordPress consumira esta API REST
+en una integracion futura.
+end note
+@enduml

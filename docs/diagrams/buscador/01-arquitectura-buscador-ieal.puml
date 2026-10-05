@@ -1,0 +1,65 @@
+@startuml
+title Arquitectura del prototipo Servicio Buscador IEAL
+left to right direction
+skinparam componentStyle rectangle
+
+actor "Portal WordPress\n(consumidor futuro)" as wordpress
+actor "Administrador o\ncliente de pruebas" as admin
+
+package "Servicio Buscador IEAL (Spring Boot)" {
+  package "api-rest" {
+    [OpenAPI YAML] as openapi
+    [Controllers REST] as controllers
+    [DTOs e interfaces\ngenerados] as generated
+    [Manejador de errores] as errors
+  }
+
+  package "application" {
+    [ContentService] as service
+    interface "ContentUseCase" as usecase
+  }
+
+  package "domain" {
+    [ContentItem] as content
+    [TextNormalizer] as normalizer
+    [RelevanceScorer] as scorer
+    interface "ContentRepositoryPort" as repositoryPort
+    interface "ExternalContentProviderPort" as providerPort
+  }
+
+  package "infra-mongo" {
+    [MongoContentRepositoryAdapter] as mongoAdapter
+    [SpringDataContentRepository] as mongoRepository
+    [WordpressContentAdapter\n(preparado, no activo)] as wpAdapter
+  }
+
+  package "boot" {
+    [SearchApplication] as bootApplication
+    [ApplicationConfig] as config
+    [SeedDataLoader] as seeds
+  }
+}
+
+database "MongoDB Community" as mongo
+file "seed-contents.json" as seedFile
+
+admin --> controllers : HTTP REST
+wordpress --> controllers : HTTP REST\n(futuro consumo)
+openapi --> generated : genera en compilacion
+generated --> controllers : contrato implementado
+controllers --> usecase
+usecase <|.. service
+service --> content
+service --> normalizer
+service --> scorer
+service --> repositoryPort
+repositoryPort <|.. mongoAdapter
+mongoAdapter --> mongoRepository
+mongoRepository --> mongo
+providerPort <|.. wpAdapter
+bootApplication --> config
+config --> service : wiring
+seeds --> seedFile
+seeds --> usecase : alta idempotente
+errors <-- controllers
+@enduml

@@ -1,0 +1,29 @@
+@startuml
+title Secuencia de busqueda consumida por WordPress
+actor Usuario
+participant "WordPress\n(futuro bloque/plugin)" as WP
+participant "SearchController" as Controller
+participant "ContentService" as Service
+participant "MongoContentRepositoryAdapter" as Adapter
+participant "SpringDataContentRepository" as Repository
+database "MongoDB" as Mongo
+participant "RelevanceScorer" as Scorer
+
+Usuario -> WP : Introduce palabra clave y filtros
+WP -> Controller : GET /api/v1/search?q=...&type=...&page=...&size=...
+Controller -> Service : search(SearchQuery, SearchFilters)
+Service -> Adapter : findAllVisible()
+Adapter -> Repository : findAllByVisibleTrue()
+Repository -> Mongo : consulta documentos visibles
+Mongo --> Repository : ContentDocument[]
+Repository --> Adapter : ContentDocument[]
+Adapter --> Service : ContentItem[]
+loop Por cada contenido compatible
+  Service -> Scorer : score(content, query)
+  Scorer --> Service : puntuacion
+end
+Service -> Service : filtra, ordena y pagina
+Service --> Controller : SearchPage
+Controller --> WP : SearchResponse JSON\n(items resumidos y score)
+WP --> Usuario : Muestra resultados enlazados al detalle
+@enduml

@@ -1,0 +1,23 @@
+# Maven
+target/
+*.log
+
+# IDE and operating system
+.idea/
+.vscode/
+*.iml
+.classpath
+.project
+.settings/
+.DS_Store
+
+# Local environment and assistant configuration
+.env
+.env.*
+!.env.example
+.codex/
+AGENTS.md
+
+# Academic deliverables and local evidence
+docs/*.docx
+docs/evidencias/

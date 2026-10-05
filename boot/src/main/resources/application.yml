@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: servicio-buscador-ieal
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/ieal_search}
+      auto-index-creation: true
+
+server:
+  port: ${SERVER_PORT:8080}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: Servicio Buscador IEAL
+    version: 0.1.0
+    description: MVP técnico del buscador de contenidos

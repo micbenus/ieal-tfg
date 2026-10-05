@@ -1,0 +1,398 @@
+openapi: 3.0.3
+info:
+  title: Buscador de contenidos IEAL
+  version: 1.0.0
+  description: |
+    API REST del MVP técnico para registrar, consultar, buscar y reindexar
+    contenidos del portal del Instituto de Estudios sobre América Latina.
+servers:
+  - url: http://localhost:8080
+    description: Entorno local
+tags:
+  - name: Search
+  - name: Contents
+  - name: Health
+
+paths:
+  /api/v1/search:
+    get:
+      tags: [Search]
+      operationId: searchContents
+      summary: Busca contenidos por palabra clave y filtros opcionales
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema: { type: string, minLength: 1 }
+          example: investigación
+        - name: type
+          in: query
+          schema: { $ref: '#/components/schemas/ContentType' }
+        - name: section
+          in: query
+          schema: { type: string }
+        - name: category
+          in: query
+          schema: { type: string }
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 0, default: 0 }
+        - name: size
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum: [relevance, date]
+            default: relevance
+      responses:
+        '200':
+          description: Resultado paginado
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SearchResponse' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /api/v1/contents:
+    get:
+      tags: [Contents]
+      operationId: listContents
+      summary: Lista contenidos registrados para administración y demostración
+      parameters:
+        - name: type
+          in: query
+          schema: { $ref: '#/components/schemas/ContentType' }
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 0, default: 0 }
+        - name: size
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+      responses:
+        '200':
+          description: Listado paginado
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ContentPageResponse' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '500': { $ref: '#/components/responses/InternalError' }
+    post:
+      tags: [Contents]
+      operationId: createContent
+      summary: Registra un contenido indexable
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateContentRequest' }
+      responses:
+        '201':
+          description: Contenido creado
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ContentResponse' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /api/v1/contents/bulk:
+    post:
+      tags: [Contents]
+      operationId: createContentsBulk
+      summary: Registra un lote de contenidos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              minItems: 1
+              maxItems: 100
+              items: { $ref: '#/components/schemas/CreateContentRequest' }
+      responses:
+        '201':
+          description: Contenidos creados
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/ContentResponse' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /api/v1/contents/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      tags: [Contents]
+      operationId: getContent
+      summary: Consulta el detalle de un contenido
+      responses:
+        '200':
+          description: Contenido encontrado
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ContentResponse' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '500': { $ref: '#/components/responses/InternalError' }
+    put:
+      tags: [Contents]
+      operationId: updateContent
+      summary: Actualiza metadatos y estado de un contenido
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateContentRequest' }
+      responses:
+        '200':
+          description: Contenido actualizado
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ContentResponse' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /api/v1/contents/{id}/reindex:
+    post:
+      tags: [Contents]
+      operationId: reindexContent
+      summary: Regenera el texto normalizado y la fecha de indexación
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Contenido reindexado
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ContentResponse' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /api/v1/health:
+    get:
+      tags: [Health]
+      operationId: getHealth
+      summary: Estado básico del prototipo
+      responses:
+        '200':
+          description: Servicio disponible
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/HealthResponse' }
+
+components:
+  responses:
+    BadRequest:
+      description: Petición inválida
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ApiErrorResponse' }
+    NotFound:
+      description: Recurso no encontrado
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ApiErrorResponse' }
+    Conflict:
+      description: Conflicto por contenido duplicado
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ApiErrorResponse' }
+    InternalError:
+      description: Error interno controlado
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ApiErrorResponse' }
+
+  schemas:
+    ContentType:
+      type: string
+      enum: [PAGE, NEWS, EVENT, CALL, PUBLICATION]
+    ContentStatus:
+      type: string
+      enum: [DRAFT, INDEXED, ARCHIVED, ERROR]
+    SourceSystem:
+      type: string
+      enum: [MANUAL, LOCAL_JSON, WORDPRESS]
+
+    CreateContentRequest:
+      type: object
+      required: [sourceId, sourceSystem, slug, title, contentType, language, status, visible]
+      properties:
+        sourceId: { type: string, minLength: 1, example: ieal-event-001 }
+        sourceSystem: { $ref: '#/components/schemas/SourceSystem' }
+        sourceUrl: { type: string, format: uri, example: 'https://example.org/evento' }
+        slug: { type: string, minLength: 1, example: vii-jornadas-jovenes-americanistas }
+        title: { type: string, minLength: 1, example: VII Jornadas de Jóvenes americanistas }
+        summary: { type: string, example: Encuentro científico para jóvenes investigadores. }
+        body: { type: string, example: Programa y descripción de las jornadas. }
+        contentType: { $ref: '#/components/schemas/ContentType' }
+        section: { type: string, example: Actividades }
+        categories:
+          type: array
+          items: { type: string }
+          example: [Jornadas, Investigación]
+        tags:
+          type: array
+          items: { type: string }
+          example: [América Latina, jóvenes]
+        keywords:
+          type: array
+          items: { type: string }
+          example: [americanistas, investigación]
+        language: { type: string, minLength: 2, example: es }
+        publishedAt: { type: string, format: date-time }
+        lastUpdatedAt: { type: string, format: date-time }
+        eventStartAt: { type: string, format: date-time, example: '2026-06-20T09:30:00Z' }
+        eventEndAt: { type: string, format: date-time, example: '2026-06-20T14:00:00Z' }
+        location: { type: string, example: Facultad de Geografía e Historia }
+        organizer: { type: string, example: Instituto de Estudios sobre América Latina }
+        status: { $ref: '#/components/schemas/ContentStatus' }
+        visible: { type: boolean, example: true }
+
+    UpdateContentRequest:
+      type: object
+      required: [sourceId, sourceSystem, slug, title, contentType, language, status, visible]
+      properties:
+        sourceId: { type: string, minLength: 1 }
+        sourceSystem: { $ref: '#/components/schemas/SourceSystem' }
+        sourceUrl: { type: string, format: uri }
+        slug: { type: string, minLength: 1 }
+        title: { type: string, minLength: 1 }
+        summary: { type: string }
+        body: { type: string }
+        contentType: { $ref: '#/components/schemas/ContentType' }
+        section: { type: string }
+        categories:
+          type: array
+          items: { type: string }
+        tags:
+          type: array
+          items: { type: string }
+        keywords:
+          type: array
+          items: { type: string }
+        language: { type: string, minLength: 2 }
+        publishedAt: { type: string, format: date-time }
+        lastUpdatedAt: { type: string, format: date-time }
+        eventStartAt: { type: string, format: date-time }
+        eventEndAt: { type: string, format: date-time }
+        location: { type: string }
+        organizer: { type: string }
+        status: { $ref: '#/components/schemas/ContentStatus' }
+        visible: { type: boolean }
+
+    ContentResponse:
+      type: object
+      required: [id, sourceId, sourceSystem, slug, title, contentType, language, indexedAt, status, visible]
+      properties:
+        id: { type: string, example: 665a12f70f443a44e6db1001 }
+        sourceId: { type: string }
+        sourceSystem: { $ref: '#/components/schemas/SourceSystem' }
+        sourceUrl: { type: string, format: uri }
+        slug: { type: string }
+        title: { type: string }
+        summary: { type: string }
+        body: { type: string }
+        contentType: { $ref: '#/components/schemas/ContentType' }
+        section: { type: string }
+        categories:
+          type: array
+          items: { type: string }
+        tags:
+          type: array
+          items: { type: string }
+        keywords:
+          type: array
+          items: { type: string }
+        language: { type: string }
+        publishedAt: { type: string, format: date-time }
+        lastUpdatedAt: { type: string, format: date-time }
+        indexedAt: { type: string, format: date-time }
+        eventStartAt: { type: string, format: date-time }
+        eventEndAt: { type: string, format: date-time }
+        location: { type: string }
+        organizer: { type: string }
+        status: { $ref: '#/components/schemas/ContentStatus' }
+        visible: { type: boolean }
+
+    SearchItemResponse:
+      type: object
+      required: [id, title, contentType, categories, score]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        summary: { type: string }
+        contentType: { $ref: '#/components/schemas/ContentType' }
+        section: { type: string }
+        categories:
+          type: array
+          items: { type: string }
+        sourceUrl: { type: string, format: uri }
+        publishedAt: { type: string, format: date-time }
+        eventStartAt: { type: string, format: date-time }
+        eventEndAt: { type: string, format: date-time }
+        location: { type: string }
+        organizer: { type: string }
+        score: { type: number, format: double, example: 8.0 }
+
+    ContentPageResponse:
+      type: object
+      required: [total, page, size, items]
+      properties:
+        total: { type: integer, format: int64 }
+        page: { type: integer }
+        size: { type: integer }
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/ContentResponse' }
+
+    AppliedFilters:
+      type: object
+      required: [query]
+      properties:
+        query: { type: string }
+        type: { $ref: '#/components/schemas/ContentType' }
+        section: { type: string }
+        category: { type: string }
+        sort: { type: string }
+
+    SearchResponse:
+      type: object
+      required: [total, page, size, results, filters]
+      properties:
+        total: { type: integer, format: int64, example: 2 }
+        page: { type: integer, example: 0 }
+        size: { type: integer, example: 20 }
+        results:
+          type: array
+          items: { $ref: '#/components/schemas/SearchItemResponse' }
+        filters: { $ref: '#/components/schemas/AppliedFilters' }
+
+    HealthResponse:
+      type: object
+      required: [status, service, version]
+      properties:
+        status: { type: string, example: UP }
+        service: { type: string, example: servicio-buscador-ieal }
+        version: { type: string, example: 0.1.0 }
+
+    ApiErrorResponse:
+      type: object
+      required: [timestamp, status, error, message, path]
+      properties:
+        timestamp: { type: string, format: date-time }
+        status: { type: integer, example: 404 }
+        error: { type: string, example: Not Found }
+        message: { type: string, example: No existe el contenido solicitado }
+        path: { type: string, example: /api/v1/contents/unknown }

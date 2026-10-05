@@ -1,0 +1,116 @@
+@startuml
+title Modelo de clases principal del buscador IEAL
+skinparam classAttributeIconSize 0
+
+class ContentItem {
+  +id: String
+  +sourceId: String
+  +sourceSystem: SourceSystem
+  +sourceUrl: String
+  +slug: String
+  +title: String
+  +summary: String
+  +body: String
+  +contentType: ContentType
+  +section: String
+  +categories: List<String>
+  +tags: List<String>
+  +keywords: List<String>
+  +language: String
+  +publishedAt: OffsetDateTime
+  +lastUpdatedAt: OffsetDateTime
+  +indexedAt: OffsetDateTime
+  +eventStartAt: OffsetDateTime
+  +eventEndAt: OffsetDateTime
+  +location: String
+  +organizer: String
+  +status: ContentStatus
+  +visible: boolean
+  -searchTextNormalized: String
+}
+
+enum ContentType {
+  PAGE
+  NEWS
+  EVENT
+  CALL
+  PUBLICATION
+}
+
+enum ContentStatus {
+  DRAFT
+  INDEXED
+  ARCHIVED
+  ERROR
+}
+
+enum SourceSystem {
+  MANUAL
+  LOCAL_JSON
+  WORDPRESS
+}
+
+class SearchQuery {
+  +value: String
+}
+
+class SearchFilters {
+  +contentType: ContentType
+  +section: String
+  +category: String
+  +page: int
+  +size: int
+  +sortOrder: SortOrder
+}
+
+class SearchPage {
+  +total: long
+  +page: int
+  +size: int
+  +results: List<ScoredContent>
+}
+
+class ScoredContent {
+  +content: ContentItem
+  +score: double
+}
+
+interface ContentUseCase {
+  +create(content)
+  +createBulk(contents)
+  +getById(id)
+  +update(id, content)
+  +reindex(id)
+  +list(type, page, size)
+  +search(query, filters)
+}
+
+interface ContentRepositoryPort {
+  +save(content)
+  +findById(id)
+  +findAll()
+  +findAllVisible()
+  +existsBySourceSystemAndSourceId(system, sourceId)
+}
+
+interface ExternalContentProviderPort {
+  +fetchContents()
+}
+
+class ContentService
+class MongoContentRepositoryAdapter
+class WordpressContentAdapter {
+  +fetchContents()
+}
+
+ContentItem --> ContentType
+ContentItem --> ContentStatus
+ContentItem --> SourceSystem
+SearchFilters --> ContentType
+SearchPage *-- ScoredContent
+ScoredContent --> ContentItem
+ContentService ..|> ContentUseCase
+ContentService --> ContentRepositoryPort
+MongoContentRepositoryAdapter ..|> ContentRepositoryPort
+WordpressContentAdapter ..|> ExternalContentProviderPort
+@enduml
